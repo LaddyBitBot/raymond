@@ -1,0 +1,9 @@
+# OpenClaw state
+openclaw-workspace-state.json
+
+# Session data
+sessions/
+agents/
+
+# Cache
+cache/
