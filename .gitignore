@@ -7,3 +7,6 @@ agents/
 
 # Cache
 cache/
+
+# Generated PDFs
+runs/*.pdf
