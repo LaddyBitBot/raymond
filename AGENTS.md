@@ -30,7 +30,7 @@ Daily runs are saved as markdown to `runs/YYYY-MM-DD.md`, committed to git, and 
 
 1. **Write the markdown run** to `runs/YYYY-MM-DD.md` as usual.
 2. **Git commit and push** the `.md` file.
-3. **Deliver a brief 2-3 line summary** with a link to the GitHub file: `https://github.com/laddy/openclaw-raymond/blob/main/runs/YYYY-MM-DD.md`
+3. **Deliver a brief 2-3 line summary** with a link to the GitHub file: `https://github.com/LaddyBitBot/raymond/blob/main/runs/YYYY-MM-DD.md`
 
 No PDF. No attachments. The markdown file on GitHub is the deliverable.
 
