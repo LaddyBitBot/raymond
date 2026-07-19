@@ -121,14 +121,14 @@ Strength is weighted most, so a powerful, coherent, well-sourced read reaches 9�
 - **Cost hurdle:** estimated move-to-first-target (in R or %) must exceed round-trip cost + slippage + expected funding over the anticipated hold by **≥ 3×** — otherwise **Hold**, even with a valid signal.
 - **Open / add** (initiate or increase): requires `|D| ≥ 0.4` **and** `Conviction ≥ 6` **and** the signal has persisted **≥ 2 consecutive run-days**, **and** the cost hurdle clears, **and** the trend gate (below) permits. Adds to an existing winner additionally follow the **§7e pyramiding rules** (profit-funded, per-unit stops, post-partial only).
 - **Trend gate (hard condition; daily-close MA structure; long side — mirror for shorts):**
-	- **Below the 20-day MA → no new position.** The signal may score and sit on the hot list, but entry waits for a daily close above the 20-day (§6 step 3 covers how this interacts with extreme-fear readings).
-	- **Above the 20-day, below the 50-day → starter only:** open at **½ of formula size** (§7b).
-	- **Above both the 20- and 50-day → full formula size**; scale a starter to full on a daily close above the 50-day. The scale-up sizes to the **current-conviction formula** (not the stale entry conviction) and does not fire if Conviction has slipped below 6 or `D` below 0.4 — a gate upgrade alone doesn't buy size for a decayed signal. Triggered scale-ups are presented as a **scale-up ticket** in the operator decisions block (mechanics in §7b).
-	- **Above the 200-day and extended** (price ≳ 20% over the 200-day, crowding `P ≥ 85`, or clearly overbought): **late-trend caution** — no size-ups, tighten the §7d trail, take the partial early. Mean reversion is the base case for *new* risk here, and the §6 fade side should already be docking the score.
+ - **Below the 20-day MA → no new position.** The signal may score and sit on the hot list, but entry waits for a daily close above the 20-day (§6 step 3 covers how this interacts with extreme-fear readings).
+ - **Above the 20-day, below the 50-day → starter only:** open at **½ of formula size** (§7b).
+ - **Above both the 20- and 50-day → full formula size**; scale a starter to full on a daily close above the 50-day. The scale-up sizes to the **current-conviction formula** (not the stale entry conviction) and does not fire if Conviction has slipped below 6 or `D` below 0.4 — a gate upgrade alone doesn't buy size for a decayed signal. Triggered scale-ups are presented as a **scale-up ticket** in the operator decisions block (mechanics in §7b).
+ - **Above the 200-day and extended** (price ≳ 20% over the 200-day, crowding `P ≥ 85`, or clearly overbought): **late-trend caution** — no size-ups, tighten the §7d trail, take the partial early. Mean reversion is the base case for *new* risk here, and the §6 fade side should already be docking the score.
 - **Exit / trim** (you hold it) — exit speed is tiered by **capital at risk (§7d rung), not rule symmetry**:
-	- **Hard triggers — same-day, at any rung:** stop hit (§7d ladder), thesis invalidation (§7a), or binary adverse evidence (hack, delisting, fraud, guidance collapse). These are facts, not statistical signals — they never wait.
-	- **Signal-decay triggers** (`D ≤ −0.4` on a long, or conviction collapse `< 4`): **same-day while the position is pre-breakeven** (rung 1 — a full 1R still exposed). On a **rung-2+ position** (stop at breakeven or better), decay exits require **two consecutive run-days**, or execute as **trim-first** — cut half same-day, confirm next run, then exit the rest or restore the rating. A one-session snapshot blip is not allowed to amputate a protected runner; capped giveback is the price of keeping the right tail.
-	- **Exits skip the trend gate at all times, and hard exits skip persistence** — risk management on exposed capital acts faster than entry.
+ - **Hard triggers — same-day, at any rung:** stop hit (§7d ladder), thesis invalidation (§7a), or binary adverse evidence (hack, delisting, fraud, guidance collapse). These are facts, not statistical signals — they never wait.
+ - **Signal-decay triggers** (`D ≤ −0.4` on a long, or conviction collapse `< 4`): **same-day while the position is pre-breakeven** (rung 1 — a full 1R still exposed). On a **rung-2+ position** (stop at breakeven or better), decay exits require **two consecutive run-days**, or execute as **trim-first** — cut half same-day, confirm next run, then exit the rest or restore the rating. A one-session snapshot blip is not allowed to amputate a protected runner; capped giveback is the price of keeping the right tail.
+ - **Exits skip the trend gate at all times, and hard exits skip persistence** — risk management on exposed capital acts faster than entry.
 - **Binary-event rule:** no new entry into a binary event (earnings, unlock, vote, scheduled regulatory date) within its window **unless the event itself is the thesis**. Events gap through stops.
 - Otherwise → **Hold**.
 
@@ -185,15 +185,15 @@ Each `HOT LIST` entry records: name, source (`op`/`sys`), date added, and trigge
 
 ### 7b. Position size (risk-based)
 
-**`Capital` and `MaxLeverage` are read from the §9 run log header (first run / no log: default $100,000 and 20×). Everything below is expressed in R and fractions of Capital — no fixed dollar amounts anywhere in the sizing math.**
+**`Capital` and `MaxLeverage` are read from the §9 run log header (§9) — default $100k / 20× on first run. Everything below is expressed in R and fractions of Capital — no fixed dollar amounts anywhere in the sizing math.**
 
 ```
-Capital        = from run log header (§9)   — default $100k on first run
-MaxLeverage    = from run log header (§9)   — default 20× on first run
+Capital = from run log header (§9) — default $100k on first run
+MaxLeverage = from run log header (§9) — default 20× on first run
 Max notional buying power = MaxLeverage · Capital
-Risk_per_trade = Capital · MaxRisk · (Conviction / 10)        MaxRisk = 5%
-Position size (notional)  = Risk_per_trade / StopDistance%
-Leverage used  = Position size / Capital    (must stay ≤ MaxLeverage)
+Risk_per_trade = Capital · MaxRisk · (Conviction / 10) MaxRisk = 5%
+Position size (notional) = Risk_per_trade / StopDistance%
+Leverage used = Position size / Capital (must stay ≤ MaxLeverage)
 ```
 
 **Sizing examples at MaxRisk = 5%, expressed as fractions of Capital (valid at any account size):**
@@ -211,10 +211,10 @@ Leverage used  = Position size / Capital    (must stay ≤ MaxLeverage)
 - On **crypto** (24/7, high-vol, liquidation cascades): treat effective max as **10×** notional per position unless a specific higher limit is set by the operator. Crypto liquidations are non-linear; the headline MaxLeverage limit applies to equities where margin calls are orderly.
 - Sizing to an **ATR-based stop already does the volatility-scaling** (a wider BTC stop ⇒ smaller notional for the same dollar risk), so no separate vol term is needed. High leverage will naturally result from tight stops on low-vol assets — confirm the stop is structurally sound before accepting the implied size.
 - **Trend-gate scaling (§5):** between the 20- and 50-day MAs, open at **½ of formula size** (a starter); scale to full on a daily close above the 50-day. Scale-up mechanics:
-	- **Size:** top the position up to the **current-conviction full formula risk**, counting the starter at its initial risk. Does not fire if Conviction < 6 or `D` < 0.4 at the reclaim.
-	- **Stops:** the new tranche carries its **own §7a stop**, set off the reclaim structure (typically just below the 50-day). **The starter's stop never moves because of a scale-up** — never widen; it advances only via the §7d ladder. In practice this means two reduce-only stop orders, one per tranche.
-	- **Ladder:** milestones (+1R breakeven, +1.5R partial exit) are measured on the **blended R** of the combined position; at blended +1R, each tranche's stop moves to its own entry price.
-	- **Visibility:** a pending reclaim level is a **watch row**, and a triggered reclaim is a **scale-up ticket** in the §9 "Operator decisions & watch levels" block — tranche size, stop, and cap checks shown, same discipline as a §7e add ticket. A gate upgrade must never pass silently as a watch-item footnote.
+ - **Size:** top the position up to the **current-conviction full formula risk**, counting the starter at its initial risk. Does not fire if Conviction < 6 or `D` < 0.4 at the reclaim.
+ - **Stops:** the new tranche carries its **own §7a stop**, set off the reclaim structure (typically just below the 50-day). **The starter's stop never moves because of a scale-up** — never widen; it advances only via the §7d ladder. In practice this means two reduce-only stop orders, one per tranche.
+ - **Ladder:** milestones (+1R breakeven, +1.5R partial exit) are measured on the **blended R** of the combined position; at blended +1R, each tranche's stop moves to its own entry price.
+ - **Visibility:** a pending reclaim level is a **watch row**, and a triggered reclaim is a **scale-up ticket** in the §9 "Operator decisions & watch levels" block — tranche size, stop, and cap checks shown, same discipline as a §7e add ticket. A gate upgrade must never pass silently as a watch-item footnote.
 
 ### 7c. Portfolio guardrails
 
@@ -279,7 +279,9 @@ The point is asymmetry: losses are capped at 1R by construction, breakeven arriv
 0. **Read account parameters** — pull `Capital` and `MaxLeverage` from the prior run log header (§9). **No prior log (first run of the system): default to a $100,000 account and 20× max leverage**, and record both in today's log header so they carry forward. All §7 sizing and guardrails use these values; nothing else in the system depends on account size.
 1. **Regime read** — compute the single `R` dial from macro data **anchored to the prior daily settlement/close** (rates/inflation/Fed/liquidity, 2s10s, DXY, oil, VIX level & term structure, breadth/% > 200-day) — one fixed anchor per day, shared across all assets including the 24/7 crypto names. **Same-day reruns reuse the same anchor and must reproduce the same `R`** — the time of day a run happens is not allowed to move it. Intraday moves are noted as watch items but do **not** re-set `R`; the one exception is a genuine regime break (FOMC, a major data surprise, a real shock), which may trigger an explicit **off-anchor update, flagged as such in the log**. **Headline discipline:** a geopolitical/macro headline only moves `R` if it is a scheduled/confirmed event or persists across the anchor — transient intraday headlines are logged as watch items, not folded into `R` (breaking, thesis-specific news belongs in the Catalyst factor, §2, not the regime dial). Flag which smile zone `R` sits in — **core** (|R| < 1.3), **transition** (1.3–1.7), or **extreme** (|R| > 1.7) — since that governs the regime contribution (§3). **Growth-scare dial (hard triggers, same anchor discipline):** compute three binary triggers — **(a) payrolls:** 3-month average payroll growth below ~50K, or a negative print; **(b) curve:** 2s10s re-inverts, or bull-steepens more than ~25bp within a month on growth fears; **(c) credit:** HY OAS more than ~75bp above its 3-month low. The count of triggers on (0–3) sets the §7c heat-cap tier; record the tier and which triggers fired in the §9 run header.
 2. **Freshness check (crypto)** — before scoring, confirm funding/OI/social inputs are current; dock `Q` for anything stale (§4).
-3. **Tier-1 screen** — quick trend/momentum/RS pass across crypto, equity single names, and diversifiers, **capturing each name's position vs its 20/50/200-day MAs (feeds the §5 trend gate)**; flag standouts, extremes, and fresh news/social-velocity spikes. For diversifier-sleeve names, confirm the Lighter market is **live/active** before it can signal — listings there cycle inactive.
+3. **Tier-1 screen** — quick trend/momentum/RS pass across crypto, equity single names, and diversifiers; flag standouts, extremes, and fresh news/social-velocity spikes. For diversifier-sleeve names, confirm the Lighter market is **live/active** before it can signal — listings there cycle inactive. Two requirements govern the screen:
+ - **Minimum coverage floor — every roster name, every run; "not screened" is not a valid row.** For each name capture: **(a)** price and position vs its 20/50/200-day MAs, noting any crossing since the prior run (feeds the §5 trend gate); **(b)** the next earnings date or scheduled binary event if within ~3 weeks (feeds the §5 binary-event rule). *Batchable: one quote-table or one per-cluster lookup satisfies the floor — per-name searches are not required, and eleven serial queries is over-compliance, not diligence.*
+ - **Equity flag checklist — any of these earns a Tier-2 flag:** an MA crossing since the last run; RS extreme vs sector or SPY (5/20-day); unusual volume, 52-week breakout, or >2σ gap; a fresh company catalyst (earnings/guidance, partnership, buyback or dilution, M&A, analyst PT action, insider-buying cluster); a sentiment extreme (short-interest spike, options skew, social velocity on retail-heavy names); an earnings date entering the ~2-week window. *Cluster-level events (an ASML/TSM print, semi-equipment data, a sector-wide move) satisfy the catalyst check for every member and flag the whole cluster — one source may legitimately flag eight names.*
 4. **Tier-2 deep dive** — hot list (§5, read from the prior §9 `HOT LIST` field — always) + current holdings (always) + Tier-1 flags. Apply the full factor set incl. sentiment/contrarian §6 and the project-specific news/social deep dive.
 5. **Score** — compute direction (§3), conviction (§4), cost hurdle, trend gate, and action (§5) for each in scope; for every open position, update the §7d exit-ladder state (current stop, rung, R-progress) **and evaluate §7e add-eligibility, flagging the window state in the log** (see §7e tracking).
 6. **Output** — a ratings table + a dated log entry (§9) with one-line rationale per rated asset, structured per the **§9 log-hygiene rules** (single-home, delta opener, one operator section).
@@ -354,6 +356,32 @@ Every fact gets **exactly one home** in the log; every other section may point t
 
 ---
 
+**2026-07-19 — Roster update: crypto-proxy equities formally classified; new spec delivered via file replacement.**
+
+*Problem.* The prior roster treated HOOD and other crypto-proxy equities as plain equity single names. With the new spec, they now explicitly trade as BTC-beta and must be counted in the crypto cluster for §7c cap purposes, not as independent equity risk.
+
+*Changes.*
+- **§0** — `HOOD` added to equity single names roster; crypto-proxy equities `MSTR, COIN, HOOD, CRCL, STRC` explicitly classified as BTC-beta for cluster accounting.
+- **§7c** — BTC-beta cluster redefined to include all crypto plus crypto-proxy equities (MSTR, COIN, HOOD, CRCL, STRC, …).
+- **§11** — system change log added at the top of the document.
+
+*Deliberately not changed.* The spec body already contained the hot list formalization, log hygiene rules, pyramiding, tiered heat caps, and diversifier sleeve from prior 2026-07 revisions. This entry captures only the delta introduced by the file replacement.
+
+---
+
+**2026-07-14 — §8 step 3: minimum coverage floor and equity flag checklist.**
+
+*Problem.* Recent runs screened the equity roster in name only: the 07-13 Tier-1 table closed with "(all others) — not screened — no notable data" covering ~10 names, and equity information reached the run only through positions held, the hot list, or incidental capture in market-wrap articles. Cause: step 3's "quick pass" set an intent but no coverage obligation, and the asset classes satisfy it at asymmetric cost — crypto arrives pre-aggregated (one F&G read, one market wrap) while equity signal lives in per-name facts (earnings dates, MA crossings, filings), so under effort pressure the screen skimmed. This was a compliance hole, not just missed opportunity: the §5 binary-event rule and trend gate need earnings dates and MA structure for exactly the names the screen never fetched.
+
+*Changes.*
+- **Coverage floor:** every roster name, every run, must have (a) price + 20/50/200-day MA position with crossings since the prior run noted, and (b) the next earnings/binary-event date if within ~3 weeks. "Not screened" is no longer a valid row.
+- **Equity flag checklist:** explicit triggers that earn a Tier-2 flag — MA crossings, RS extremes, volume/breakout/gap anomalies, fresh company catalysts, sentiment extremes, earnings entering the ~2-week window.
+- **Efficiency permissions (not procedures):** the floor is satisfiable by batched quote-table or per-cluster lookups (per-name serial searches are over-compliance), and cluster-level sources legitimately flag every cluster member. Search *methods* are deliberately unspecified — a capable model formulates queries better than a spec can freeze them, and prescribed procedures rot; if a future (e.g., weaker-model) deployment shows search thrashing or under-coverage, how-guidance gets added then as an evidence-driven revision.
+
+*Deliberately not changed.* Tier-2 depth, the flag-to-deep-dive routing, and the crypto/diversifier screens — this sets a floor under the equity screen, not a new ceiling on anything else.
+
+---
+
 **2026-07-13 — §9 log hygiene (single-home rule); §7c risk accounting clarified to current stops; §5/§7b starter scale-up mechanics pinned.**
 
 *Problem (two unrelated gaps).* **(1)** Logs were growing noisy through duplication, not information: the 2026-07-13 run carried its major facts (regime break, ETH trend-gate downgrade, UNI fee-switch catalyst) in **four places each** — a 17-item opening narrative, the step-1 watch items, the per-asset Tier-2 blocks, and the §9 run notes — with sources re-cited at every mention and unchanged facts re-transcribed daily. Noise obscures the deltas that matter and inflates the context every future run must re-read. **(2)** The §7c caps were being computed on *initial* 1R even after the §7d ladder had moved a stop: UNI at breakeven still counted $400 toward the crypto cluster, so the ladder reduced real risk without freeing any cap room — making the breakeven rung meaningless at the portfolio level and spuriously blocking entries (ONDO) and future §7e adds.
@@ -362,7 +390,7 @@ Every fact gets **exactly one home** in the log; every other section may point t
 - **§9 — log-hygiene rules (new):** every fact gets exactly one home; other sections point, never repeat. Run opener limited to **≤ 6 one-line delta bullets** (no prices/sources/analysis); macro data and a single watch-items list live in step 1; asset facts live in that asset's Tier-2 block with the table rationale genuinely one line; run notes capped at ~150 delta-focused words; position alerts and action items merged into one **"Operator decisions & watch levels"** block (trigger level + action per row); sources cited once at the fact's home; carried-forward facts stated as `unchanged` rather than re-narrated.
 - **Resolution guarantee:** compression is by de-duplication and relocation only — every material number (price, stop, R, level, cap, tier) must still appear exactly once; §8 step 6 output references the rules.
 - **§7c — risk accounting at current stops (new first bullet):** every cap in §7c counts a position's **worst case at its current stop** — breakeven or better counts $0 (floored at zero). Ladder progress now frees heat/cluster room, which is what funds new entries and §7e adds. Initial 1R still governs R-progress and sizing. Immediate effect on the live book: heat $3,400 → $3,000 counted, crypto cluster $2,800 → $2,400 (UNI at BE counts $0), so ONDO's $600 formula risk fits the cluster exactly rather than being blocked at $200 headroom.
-- **§5/§7b — starter scale-up mechanics (third gap: the ETH 50-day reclaim watch on 2026-07-12 surfaced only as a footnote, and the sizing/stop mechanics were undefined):** the scale-up sizes to the **current-conviction** formula and does not fire if Conviction < 6 or `D` < 0.4 at the reclaim; the new tranche carries its **own §7a stop** off the reclaim structure while **the starter's stop never moves because of a scale-up** (two reduce-only stop orders in practice); ladder milestones run on blended R, with each tranche's stop moving to its own entry at blended +1R; pending reclaims are watch rows and triggered reclaims are **scale-up tickets** in the operator decisions block — never silent footnotes. Terminology also disambiguated: "partial" always means the rung-3 partial *exit* (`ADDS: CLOSED (partial exit not yet taken)`); starter-size entries belong to the trend gate, conviction-scaled sizing to §7b.
+- **§5/§7b — starter scale-up mechanics (third gap: the ETH 50-day reclaim watch on 2026-07-12 surfaced only as a footnote, and the sizing/stop mechanics were undefined):** the scale-up sizes to the **current-conviction** formula and does not fire if Conviction < 6 or `D` < 0.4 at the reclaim; the new tranche carries its **own §7a stop** off the reclaim structure while **the starter's stop never moves because of a scale-up** (two reduce-only stop orders in practice); ladder milestones run on blended R, with each tranche's stop moving to its own entry at blended +1R; pending reclaims are watch rows and triggered reclaims are **scale-up tickets** in the operator decisions block — never silent footnotes. Terminology also disambiguated: "partial" always means the rung-3 **partial exit** (`ADDS: CLOSED (partial exit not yet taken)`); starter-size entries belong to the trend gate, conviction-scaled sizing to §7b.
 
 *Deliberately not changed.* What gets computed and recorded — all fields, ladder state, guardrails, per-asset depth — is untouched by the hygiene rules (they change where facts live, not which facts exist). The cap *levels* (25/20/15/10% tiers, 15% cluster) and the sizing formula are untouched by the accounting clarification — it changes what the caps count, not where they sit.
 
@@ -429,22 +457,7 @@ Every fact gets **exactly one home** in the log; every other section may point t
 *Problem.* The spec hard-coded a $100,000 account and fixed dollar amounts throughout §7 (risk-per-trade dollars, a $2,000,000 total notional cap, a $100,000 per-position cap, a dollar cluster figure), so the document only described one account size and the header/§7 disagreed on max leverage (25× vs 20×). It also contained an internal inconsistency: the §7b "$ Risked" column ($500/$400/$300/$2500) contradicted both the sizing formula and the table's own notional/leverage columns.
 
 *Changes.*
-- **Header, §7b, §7c, §7d** — all fixed dollar amounts removed. Sizing, caps, and guardrails are now expressed **only in R and fractions of `Capital`** (risk % of Capital, notional as a multiple of Capital, total notional ≤ `MaxLeverage · Capital`, per-position notional ≤ 1× Capital, cluster cap ~15% of Capital at risk), so the identical system applies to any account size.
-- **§8 step 0 (new)** — each run begins by reading `Capital` and `MaxLeverage` from the prior run log header. **If no log exists (first run), defaults are $100,000 and 20× max leverage**, recorded into that day's header.
-- **§9 log format** — header line gains `CAPITAL=$__ | MAXLEV=__×` fields; the log is now the single source of truth for account parameters between runs.
-- **Consistency fixes** — the header's stray "25×" normalized to the log-driven `MaxLeverage` (default 20×); the §7b risk column corrected to the formula-consistent values (5% / 4% / 3% / 2.5% of Capital), which also removes the $2500 typo at the conviction-5 row.
+- **Header, §7b, §7c, §7d** — all fixed dollar amounts removed. Sizing, caps, and guardrails are now expressed **only in R and fractions of `Capital`** (risk %, notional % of Capital, cluster % of Capital). `Capital` and `MaxLeverage` are read from the §9 run log header at the start of every run; first-run defaults are $100,000 and 20×.
+- **§9** — header table explicitly carries `CAPITAL` and `MAXLEV` forward so every run knows the account parameters.
 
-*Deliberately not changed (scope control).* MaxRisk (5%), the 25% heat cap, the ~15% cluster cap, the conviction/sizing formula itself, and all ATR/exit mechanics are untouched — this revision changes the *units and parameter source*, not the risk tolerances.
-
----
-
-**2026-07-02 — Regime read stabilized against run-timing noise.**
-
-*Problem.* Running the system at different times of the same day produced large swings in the regime read `R`, even though macro regime is a slow-moving, days-to-weeks phenomenon. The cause was measurement, not regime: `R` was set from a live, point-in-time web snapshot whose most volatile inputs (intraday VIX/breadth, live headlines) depended on *when* the run happened, and the hard `|R| ≥ 1.5` smile boundary could invert the sign of the regime term on a tiny wobble.
-
-*Changes.*
-- **§8 step 1** — `R` is now computed from data **anchored to the prior daily settlement/close**, one fixed value per day; same-day reruns must reproduce it. A genuine regime break (FOMC, major surprise) may still force a **flagged** off-anchor update. Added **headline discipline**: transient intraday headlines are watch items, not `R` inputs — only scheduled/confirmed or anchor-persistent macro events move the dial (breaking thesis-specific news routes to the §2 Catalyst factor instead).
-- **§3 regime smile** — replaced the hard `|R| ≥ 1.5` step with a **linear transition band over 1.3–1.7**. Pure directional below 1.3, pure contrarian above 1.7, smoothly blended between — so a measurement wobble near the old boundary eases the contribution instead of flipping its sign.
-- **§9 log line** — now records the **anchor used** and the **smile zone** (core/transition/extreme) so reruns are checkable against each other.
-
-*Deliberately not changed (scope control).* No EWMA / cross-run smoothing of `R` was added — anchoring removes the intraday variance that prompted this fix, and smoothing carries a real risk of over-damping genuine regime breaks. It is parked as a candidate for a later revision *only if* across-day jumpiness turns out to be a separate, observed problem. Factor weights (§2), conviction math (§4), sentiment transform (§6), and sizing/guardrails (§7) were left untouched so the effect of this revision can be read in isolation.
+*Deliberately not changed.* MaxRisk (5%), the 15% cluster cap, the 25/20/15/10% tiered heat caps, and the formula for conviction (§4) remain the same — only the *carrier* for account size changed, not the risk percentages.
