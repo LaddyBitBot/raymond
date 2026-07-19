@@ -45,6 +45,7 @@
 ## Hot List
 - NVDA (op, added 2026-07-12) — Conv 7, TSMC confirms AI cycle
 - ONDO (watch) — Conv 9, highest in universe, DTCC catalyst, cap-constrained
+- HOOD (watch, added 2026-07-18) — crypto-equity proxy, earnings July 30
 
 ## Lessons Learned
 - **Always pull live prices from Coinbase API for market data**, not stale web search snapshots. Web search results can be hours old.
@@ -53,4 +54,6 @@
 - **Don't repeat phrases** across messages. If you said "No, I didn't" once, don't say it again — just do the action.
 - **"I'll do better" is meaningless unless written here.** Every time a quality mistake is caught, add the concrete fix to this section. This is the only mechanism for cross-session improvement.
 - **When asked about market prices, always fetch live from Coinbase API first** — never lead with web search prices. Web search is for news/context only.
+- **When Mike sends a file named `rating-system-spec---*.md`**, replace `rating-system-spec.md` in the workspace with the received content, commit it as "Replace rating-system-spec.md with YYYY-MM-DD revision", and push to GitHub. Do not add or modify the §11 changelog — that travels with the file content he sends.
 - **Stop levels are single numbers, not ranges.** Run the ATR math, round to a clean level, commit. Don't present a range and call it ambiguity.
+- **When Mike says "open" or "close" a position, he is the trader — I only update the log.** Do not execute trades, do not place orders, and do not run git commit/push for those log updates unless he explicitly asks. The entry/exit price he states is logged as the operator-executed fill.
