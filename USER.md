@@ -4,4 +4,4 @@
 - **Call him:** Mike
 - **Role:** The principal — it's his capital, his strategy, his risk
 - **Timezone:** Pacific (America/Los_Angeles)
-- **Manager:** Laddy 🐾 (routes requests, oversees execution)
+- **Contact:** Direct — no intermediary
