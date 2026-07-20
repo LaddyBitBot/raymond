@@ -303,6 +303,37 @@ The point is asymmetry: losses are capped at 1R by construction, breakeven arriv
 
 **Cadence:** daily runs are **mandatory** — the §7d exit ladder and per-position stop tracking are managed per run, and a missed run is unmanaged risk. Add extra checks around known catalysts and, for crypto, an intraday glance when funding/OI/social move sharply.
 
+### 8a. Split-run mode (optional execution mode)
+
+The daily run may execute as **one session (default)** or as **two sessions with a specified handoff**. Behavior must be identical either way — the split changes execution cost, not rules. Any behavior difference between split and single-session execution is a schema bug: report it as a §11 item, never patch it ad hoc mid-session.
+
+**Session A — Screen (steps 0–3).** Inputs: current spec + prior run log. Performs step-0 state validation (SPEC check + true-up), the regime read/GS dial/watch items, the freshness & Q table, and the full coverage screen with flags. Produces the **handoff artifact** below and nothing else — no scoring, no actions, no Tier-2. A is mechanical and may run on a cheaper model.
+
+**Session B — Rate (steps 4–6 + the §9 log).** Inputs: current spec + the handoff artifact **only** — never the prior log; the artifact's state echo replaces it. B opens with the validation checklist below and **halts on any failure** — it never scores on partial state. It runs Tier-2 deep dives (re-searching flagged names fresh — A's numbers are context, not evidence), scores, applies gates and produces tickets, and writes the §9 log, stitching the artifact's coverage table in as the log's step-3 section so **the log of record remains one complete file**. Operator fills are reported to session B (it owns ladder state).
+
+**Staleness rule:** every artifact value carries session A's timestamp. B must **re-quote anything decision-critical** — any price within ~2% of a stop, entry/exit trigger, MA-gate line, or partial level — rather than trust an hours-old number.
+
+**Handoff artifact schema** (all sections required; a missing field is a validation failure):
+
+```
+H1. RUN META — date/time + timezone, SPEC date, session-A model, anchor used
+H2. STATE ECHO (from the prior log, trued up per step 0):
+    · header fields: CAPITAL, MAXLEV, prior R/zone, GS TIER, HOT LIST (full entries)
+    · per open position: asset, direction, entry date/price, notional, current stop
+      + ladder rung, 1R, R-progress, days-in-trade, ADDS state, and any
+      OVERRIDE / FLIP / flip-CD tags
+    · realized book: closed positions with realized R (cumulative)
+H3. REGIME BLOCK — R + zone (+ off-anchor rationale if moved), input table,
+    RS by β-tier, GS dial (triggers fired + tier), macro watch items (single list)
+H4. FRESHNESS / Q — per-name Q values, with reasons for any changes
+H5. COVERAGE TABLE — every non-parked name: price, 20/50/200-day position with
+    crossings since the prior run, earnings/binary events within ~3 weeks,
+    flag Y/N with the checklist trigger cited per flag (incl. long or short-setup)
+H6. HANDOFF NOTES — anything A judged relevant but couldn't place (≤ ~100 words)
+```
+
+**Session B validation checklist:** all H-sections present · H2 complete (position count matches; no open position without a current stop; tags carried) · H1 SPEC date matches the current spec's latest §11 entry · timestamps < 24h old · every H5 flag cites a checklist trigger. Any failure → halt and report to the operator.
+
 ---
 
 ## 9. Log format (carry this forward between runs)
@@ -382,7 +413,8 @@ Every fact gets **exactly one home** in the log; every other section may point t
 - **Entry timing (§5/§6):** hard 20/50/200-day trend gate with starter scaling and scale-up tickets sized at current conviction; sentiment smile sharpened to true extremes (±2.0 reserved for P ≥ 95 / P ≤ 12 or cascade days) with the capitulation → reclaim sequencing rule ("sentiment scores it, the trend gate times it").
 - **Two-sided book (§5):** shorts as a distinct setup class — euphoria (P ≥ 85) or breakdown (50-day break + failed retest) required, never `D ≤ −0.4` alone; ½ formula size; no binary-event entries without exception; no shorts into P ≤ 25 fear; directional hysteresis (5 run-days, |D| ≥ 0.6, 3-day persistence for opposite-direction re-entry) with `FLIP` tags and auto-escalation. Diversifier sleeve parked to **XAU only** (regime term inverse — the universe's one polarity exception); parked names exempt from screening and reactivation gated on logged evidence.
 - **Macro defense (§7c/§8):** growth-scare dial (payrolls / curve / credit) driving tiered heat caps 25/20/15/10% of Capital, with Tier 2–3 restricting high-beta longs while permitting shorts and XAU; all §7c caps count worst case at **current stops** (breakeven counts $0 — ladder progress frees cap room).
-- **Process & audit (§5/§8/§9):** operator-override rule (`OVERRIDE:` tag, renewed every run, else trimmed to formula); hot list persisted in the §9 header with op/sys sources and expiry; Tier-1 minimum coverage floor (every non-parked name: MA structure + earnings within ~3 weeks; "not screened" invalid) with equity and short-setup flag checklists; §9 native-markdown log with the single-home hygiene rules, add-window flags, add/scale-up tickets, and gross/net direction rows.
+- **Process & audit (§5/§8/§9):** operator-override rule (`OVERRIDE:` tag, renewed every run, else trimmed to formula); hot list persisted in the §9 header with op/sys sources and expiry; Tier-1 minimum coverage floor (every non-parked name: MA structure + earnings within ~3 weeks; "not screened" invalid) with equity and short-setup flag checklists; §9 native-markdown log with the single-home hygiene rules, add-window flags, add/scale-up tickets, and gross/net direction rows; **`SPEC` version field** in the run header with a mandatory step-0 state validation (spec/log mismatch → true up carried state before scoring — fields missing under new rules, values computed under retired rules, invalid enumerations).
+- **Split-run execution mode (§8a, optional):** the run may split into Session A (screen, steps 0–3 → a schema'd handoff artifact H1–H6 with trued-up state echo, regime block, Q table, and coverage table with cited flag triggers; cheaper model permitted) and Session B (rate, steps 4–6 + §9 log; reads spec + artifact only, opens with a validation checklist that halts on any failure, re-quotes any price within ~2% of a stop/trigger/gate/partial level, and stitches the coverage table into the log so the log of record stays one file). Behavior must be identical across modes — single-session remains the default and reference implementation; any split-vs-single difference is a schema bug fixed via §11. The artifact exists only in split mode (in regular mode the log itself is the record; emitting both would duplicate every screen fact).
 
 *Deliberately preserved from the original system:* the factor weight sets (§2), the conviction formula (§4), the regime smile and anchor discipline (§3), MaxRisk 5%, and the 15% cluster cap — the scoring core is unchanged; this revision rebuilt exits, entry timing, macro defense, direction, and auditability around it.
 
