@@ -1,0 +1,419 @@
+{
+ "date": "2026-07-21",
+ "BTC": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 66613.6
+ },
+ "ETH": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 1938.21
+ },
+ "SOL": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 78.428
+ },
+ "BNB": {
+  "ma": {
+   "20": "above",
+   "50": "below",
+   "200": "below"
+  },
+  "price": 574.3987
+ },
+ "HYPE": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": "above"
+  },
+  "price": 61.0925
+ },
+ "ZEC": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 535.947
+ },
+ "NEAR": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": "above"
+  },
+  "price": 1.94293
+ },
+ "XLM": {
+  "ma": {
+   "20": "above",
+   "50": "below",
+   "200": "above"
+  },
+  "price": 0.19311
+ },
+ "AVAX": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": "below"
+  },
+  "price": 6.5934
+ },
+ "TRX": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 0.32945
+ },
+ "LIT": {
+  "ma": {
+   "20": "below",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 2.3682
+ },
+ "OP": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": "below"
+  },
+  "price": 0.09842
+ },
+ "POL": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 0.080055
+ },
+ "ARB": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 0.08969
+ },
+ "MNT": {
+  "ma": {
+   "20": "above",
+   "50": "below",
+   "200": "below"
+  },
+  "price": 0.43047
+ },
+ "LINEA": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 0.002498
+ },
+ "AAVE": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 95.838
+ },
+ "LINK": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 8.70754
+ },
+ "ENA": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 0.08726
+ },
+ "VVV": {
+  "ma": {
+   "20": "above",
+   "50": "below",
+   "200": "above"
+  },
+  "price": 12.69
+ },
+ "MORPHO": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 2.06989
+ },
+ "APT": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": "below"
+  },
+  "price": 0.6111
+ },
+ "JUP": {
+  "ma": {
+   "20": "below",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 0.20084
+ },
+ "LDO": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 0.38806
+ },
+ "CRV": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 0.21586
+ },
+ "AERO": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": "above"
+  },
+  "price": 0.45207
+ },
+ "UNI": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 3.7304
+ },
+ "ONDO": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 0.40401
+ },
+ "MU": {
+  "ma": {
+   "20": "above",
+   "50": "below",
+   "200": null
+  },
+  "price": 986.1
+ },
+ "NVDA": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 206.188
+ },
+ "MSTR": {
+  "ma": {
+   "20": "above",
+   "50": "below",
+   "200": null
+  },
+  "price": 102.49
+ },
+ "GOOG": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": "above"
+  },
+  "price": 349.43
+ },
+ "STRC": {
+  "ma": {
+   "20": "above",
+   "50": "below",
+   "200": null
+  },
+  "price": 87.99
+ },
+ "SNDK": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": null
+  },
+  "price": 1631.74
+ },
+ "CRCL": {
+  "ma": {
+   "20": "above",
+   "50": "below",
+   "200": null
+  },
+  "price": 70.655
+ },
+ "MRVL": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": null
+  },
+  "price": 212.77
+ },
+ "AMZN": {
+  "ma": {
+   "20": "below",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 246.339
+ },
+ "TSLA": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": "below"
+  },
+  "price": 379.35
+ },
+ "MSFT": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 396.26
+ },
+ "INTC": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": null
+  },
+  "price": 107.744
+ },
+ "META": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 640.7
+ },
+ "AAPL": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 323.95
+ },
+ "AMD": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": null
+  },
+  "price": 545.12
+ },
+ "SPCX": {
+  "ma": {
+   "20": "below",
+   "50": null,
+   "200": null
+  },
+  "price": 125.24
+ },
+ "HOOD": {
+  "ma": {
+   "20": "below",
+   "50": "above",
+   "200": "above"
+  },
+  "price": 107.09
+ },
+ "ORCL": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": null
+  },
+  "price": 128.21
+ },
+ "COIN": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 177.048
+ },
+ "PLTR": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": "below"
+  },
+  "price": 131.572
+ },
+ "DELL": {
+  "ma": {
+   "20": "above",
+   "50": "above",
+   "200": null
+  },
+  "price": 427.51
+ },
+ "TSM": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": null
+  },
+  "price": 423.34
+ },
+ "RKLB": {
+  "ma": {
+   "20": "below",
+   "50": "below",
+   "200": null
+  },
+  "price": 74.34
+ },
+ "XAU": {
+  "ma": {
+   "20": "above",
+   "50": "below",
+   "200": "below"
+  },
+  "price": 4099.1
+ }
+}
