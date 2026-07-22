@@ -48,6 +48,7 @@
 - HOOD (watch, added 2026-07-18) — crypto-equity proxy, earnings July 30
 
 ## Lessons Learned
+- **The daily pipeline jobs are the "screen" and "rating" jobs — never "Session A" or "Session B".** The system was split into system-screen.md and system-rate.md; the old Session A/B terminology is retired. The three cron jobs are: `raymond-fetch-coverage` (coverage script, 7:00 AM), `raymond-screen` (screen phase, 7:15 AM), `raymond-rate` (rating phase, 7:30 AM).
 - **Always pull live prices from Coinbase API for market data**, not stale web search snapshots. Web search results can be hours old.
 - **Stop calculations must use §7a formula** (2.5× ATR beyond invalidation), not eyeballed ranges. The daily run's "$195–198" was sloppy estimation.
 - **Don't narrate process** ("Let me pull...", "Now I have everything I need..."). Do the work silently, deliver the answer. Narrating creates clutter and repetition.
